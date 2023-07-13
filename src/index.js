@@ -67,27 +67,29 @@ function Header() {
 }
 
 function Menu() {
+  const pizzas = pizzaData;
   return (
     <main className="menu">
       <h2>Our menu</h2>
-
-      <ul className="pizzas">
-        {pizzaData.map((pizza) => (
-          <Pizza pizzaObj={pizza} key={pizza.name} />
-        ))}
-      </ul>
+      {pizzas && (
+        <ul className="pizzas">
+          {pizzas.map((pizza) => (
+            <Pizza pizzaObj={pizza} key={pizza.name} />
+          ))}
+        </ul>
+      )}
     </main>
   );
 }
 
-function Pizza(props) {
+function Pizza({ pizzaObj }) {
   return (
     <li className="pizza">
-      <img src={props.pizzaObj.photoName} alt={props.name} />
+      <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
-        <h2>{props.name}</h2>
-        <p>{props.ingredients}</p>
-        <span>{props.price}</span>
+        <h2>{pizzaObj.name}</h2>
+        <p>{pizzaObj.ingredients}</p>
+        <span>{pizzaObj.price}</span>
       </div>
     </li>
   );
@@ -102,11 +104,25 @@ function Footer() {
 
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()}. We are open{" "}
+      {isOpen ? (
+        <Order closeHour={closeHour} openHour={openHour} />
+      ) : (
+        <p>We are close</p>
+      )}
     </footer>
   );
   //return React.createElement('footer', null, 'we re currently open');
 }
 
+function Order({ openHour, closeHour }) {
+  return (
+    <div className="order">
+      <p>
+        We are open {openHour}:00 to {closeHour}:00
+      </p>
+      <button className="btn">Order</button>
+    </div>
+  );
+}
 const root = ReactDom.createRoot(document.getElementById("root"));
 root.render(<App />);
